@@ -107,6 +107,7 @@ class RecipeSearch extends Recipe
             'status' => $this->status,
         ]);
         $query->andFilterWhere(['in', Ingredient::tableName() . '.id', $this->name])
+            ->andFilterWhere([Ingredient::tableName() . '.status'=> Ingredient::STATUS_ACTIVE])
             ->andFilterWhere(['like', 'short_description', $this->short_description])
             ->andFilterWhere(['like', 'full_description', $this->full_description]);
         return $dataProvider;
@@ -115,14 +116,13 @@ class RecipeSearch extends Recipe
 
     public static function sortByIngredients($a, $b)
     {
-        var_dump(Yii::$app->request->queryParams['name']);
-        $ingredients = Yii::$app->request->queryParams['name'];
+
+        $ingredientsRequest = Yii::$app->request->queryParams["RecipeSearch"]['name'];
         $aIngredients = ArrayHelper::getColumn($a->recipeIngredients, 'id'); //Массив
         $bIngredients = ArrayHelper::getColumn($b->recipeIngredients, 'id'); //Массив
-        $concurrenceIngredientsCount = count(array_intersect($ingredients, $modelIngredients));
-        $requestIngredientsCount = count($ingredients);
-
-        if ($a->id == $b->id) return 0;
-        return ($a->id < $b->id) ? -1 : 1;
+        $aIngredientsCount = count(array_intersect($aIngredients, $ingredientsRequest));
+        $bIngredientsCount = count(array_intersect($bIngredients, $ingredientsRequest));
+        if ($aIngredientsCount == $bIngredientsCount) return 0;
+        return ($aIngredientsCount > $bIngredientsCount) ? -1 : 1;
     }
 }

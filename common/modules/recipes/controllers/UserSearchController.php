@@ -2,6 +2,7 @@
 
 namespace common\modules\recipes\controllers;
 
+use common\filters\AccessControl;
 use common\models\RecipeSearch;
 use Yii;
 use common\models\Ingredient;
@@ -22,6 +23,16 @@ class UserSearchController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['index'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -46,11 +57,14 @@ class UserSearchController extends Controller
         $ingredientsRequest = $searchModel->name;
         if (count($models) > 0) {
             $separatedModels = $this->getSeparatedModels($models, $ingredientsRequest);
+            $models = [];
             if (!empty($separatedModels['fullConcurrenceModels'])) {
-                $dataProvider->setModels($separatedModels['fullConcurrenceModels']);
-            } else {
-                $dataProvider->setModels($separatedModels['partiallyConcurrenceModels']);
+                $models = $separatedModels['fullConcurrenceModels'];
+            } elseif (!empty($separatedModels['partiallyConcurrenceModels'])) {
+                $models = $separatedModels['partiallyConcurrenceModels'];
+                usort($models, array('common\models\RecipeSearch','sortByIngredients'));
             };
+            $dataProvider->setModels($models);
         }
         return $this->render('index', [
             'searchModel' => $searchModel,

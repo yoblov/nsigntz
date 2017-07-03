@@ -2,6 +2,7 @@
 
 namespace common\modules\recipes\controllers;
 
+use common\filters\AccessControl;
 use common\models\Ingredient;
 use common\models\RecipeIngredients;
 use Yii;
@@ -23,6 +24,16 @@ class AdminRecipesController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['index', 'view', 'create', 'show', 'hide', 'update', 'delete'],
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

@@ -31,15 +31,6 @@ $this->title = 'Nsign Тестовое задание';
                     </a>
                 </div>
             </div>
-            <div class="col-lg-4">
-                <div class="list-group">
-                    <a href="#" class="list-group-item">
-                        <h4 class="list-group-item-heading">Пользователи</h4>
-
-                        <p class="list-group-item-text">Панель управления пользователями системы</p>
-                    </a>
-                </div>
-            </div>
         </div>
 
     </div>
