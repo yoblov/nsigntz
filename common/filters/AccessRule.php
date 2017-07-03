@@ -25,7 +25,7 @@ class AccessRule extends \yii\filters\AccessRule
                     $access |= !$user->isGuest;
                     break;
                 case 'admin':
-                    $access |= !$user->isGuest && $user->identity->role === 1;
+                    $access |= !$user->isGuest && ($user->identity->role === 1);
                     break;
             }
         }

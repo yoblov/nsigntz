@@ -11,6 +11,7 @@ return [
     'language' => 'ru-RU',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
+    'defaultRoute' => '/recipes/user-search/index',
     'homeUrl'=>'/frontend/web/recipes/user-search/index',
     'controllerNamespace' => 'frontend\controllers',
     'modules' => [
